@@ -12,6 +12,4 @@ const equilateralTriangle = (rows) => {
             str = "";
         }
     }
-
-
-equilateralTriangle(10);
+export default equilateralTriangle;

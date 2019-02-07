@@ -1,22 +1,4 @@
-const users = [
-    {
-        traineeEmail : 'trainee1@successive.tech',
-        reviewerEmail : 'reviewer1@successive.tch'
-    },
-    {
-        traineeEmail : 'trainee2@successive.tech',
-        reviewerEmail : 'reviewer2@successive.tch'
-    }
-];
-
-const validateEmail = (email) => {
-    let pattern = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-    if(pattern.test(email)) {
-        return true;
-    } else {
-        return false;
-    }
-}
+import validateEmail from './helper';
 
 const validateUsers = (arr) => {
     let valid = [{count : 0}], inValid = [{count : 0}];
@@ -34,4 +16,4 @@ const validateUsers = (arr) => {
     console.log("invalid : " + JSON.stringify(inValid, null, 2));
 }
 
-validateUsers(users);
+export default validateUsers;

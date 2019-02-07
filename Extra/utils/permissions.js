@@ -1,12 +1,4 @@
-const permissions = {
-    'getUsers': {
-    all: ['head-trainer'],
-    read : ['trainee', 'trainer'],
-    write : ['trainer'],
-    delete: [],
-    }
-};
-
+import permissions from '../constants';
 const hasPermission = (moduleName, role, permissionType) => {
     if(permissions[moduleName]) {
         if(permissions[moduleName][permissionType].includes(role) || permissions[moduleName]['all'].includes(role)){
@@ -18,5 +10,6 @@ const hasPermission = (moduleName, role, permissionType) => {
         }
     }
 }
+// hasPermission('getUsers', 'trainee', 'read');
 
-hasPermission('getUsers', 'trainee', 'read');
+export default hasPermission;
