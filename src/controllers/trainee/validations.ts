@@ -2,7 +2,7 @@ const validations = {
     post: {
         id: {
             required: true,
-            string: true,
+            number: true,
             in: ['body'],
             errorMessage: "Id is required",
             custom: function(value) {
@@ -45,7 +45,7 @@ const validations = {
             string: true,
             in: ['body']
         },
-        dateToUpdate: {
+        dataToUpdate: {
             in: ['body'],
             required: true,
             isObject: true,

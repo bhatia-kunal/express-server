@@ -1,5 +1,5 @@
 import * as express from 'express';
-import traineeRouter from './controllers/trainee/routes'
+import traineeRouter from './controllers/trainee/index';
 
 const router: express.Router = express.Router();
 
