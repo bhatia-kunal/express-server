@@ -1,4 +1,7 @@
 import { IConfig } from './config/IConfig';
+import * as bodyParser from 'body-parser';
+import notFoundRoutes from './libs/routes/notFoundRoutes';
+import errorHandler from './libs/routes/errorHandler';
 import * as express from 'express';
 
 class Server {
@@ -9,8 +12,15 @@ class Server {
     }
 
     public bootstrap() {
+        this.initBodyParser();
         this.setupRoutes();
         return this;
+    }
+
+    public initBodyParser() {
+        const { app } = this;
+        app.use(bodyParser.urlencoded({ extended: false }));
+        app.use(bodyParser.json(true));
     }
 
     public setupRoutes() {
@@ -22,6 +32,8 @@ class Server {
                 msg: 'I am OKAY'
             });
         });
+        app.use(notFoundRoutes);
+        app.use(errorHandler);
     }
 
     public run() {
