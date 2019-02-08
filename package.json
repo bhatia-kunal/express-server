@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "babel": "babel-node src --presets env",
-    "build": "tsc"
+    "build": "tsc",
+    "nodemon": "nodemon ./dist/index.js",
+    "src": "tsc-watch --project . --onSuccess \"npm run nodemon\""
   },
   "repository": {
     "type": "git",
@@ -27,7 +29,9 @@
   },
   "dependencies": {
     "@types/node": "^10.12.23",
+    "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "nodemon": "^1.18.9"
   }
 }
