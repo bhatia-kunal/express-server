@@ -2,7 +2,17 @@ import { Request, Response, Next } from 'express';
 
 class Trainee {
     public get(req: Request, res: Response) {
-        res.send("<h1>Hello</h1>");
+        const data = [
+            {
+                name: "trainee1",
+                Id: 1
+            },
+            {
+                name: "trainee2",
+                Id: 2
+            }
+        ];
+        res
     }
 
     public post(req: Request, res: Response) {
