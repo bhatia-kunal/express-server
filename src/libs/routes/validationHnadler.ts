@@ -1,5 +1,3 @@
-import { LOADIPHLPAPI } from "dns";
-
 const validationHandler = (config) => {
     return (req, res, next) => {
         const keys = Object.keys(config);
