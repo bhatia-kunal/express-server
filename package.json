@@ -28,11 +28,13 @@
     "typescript": "^3.3.1"
   },
   "dependencies": {
+    "@types/mongoose": "^5.3.12",
     "@types/node": "^10.12.23",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.11",
     "nodemon": "^1.18.9"
   }
 }

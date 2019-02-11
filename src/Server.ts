@@ -4,6 +4,7 @@ import { notFoundRoutes, errorHandler } from './libs/routes/index';
 import * as express from 'express';
 import router from './router';
 import successHandler from './libs/routes/successHandler';
+import Database from './libs/Database';
 
 class Server {
     public app: express.Express;
@@ -42,14 +43,21 @@ class Server {
     public run() {
         const {
             app,
-            config: {Port}
+            config: {Port, MONGO_URL}
         } = this;
-        app.listen(Port, (error) => {
-           if(error) {
-               throw error;
-           }
-           console.log(`Server running on Port ${Port}`)
-        });
+        Database.open(MONGO_URL)
+            .then(result => {
+                console.log("MongoDB Connected");
+                app.listen(Port, (error) => {
+                    if(error) {
+                        throw error;
+                    }
+                    console.log(`Server running on Port ${Port}`);
+                });
+            })
+            .catch(err => {
+                console.log("Error occured while connecting with DB");
+            })
     }
 }
 
