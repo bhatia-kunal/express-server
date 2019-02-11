@@ -1,8 +1,9 @@
 import { IConfig } from './config/IConfig';
 import * as bodyParser from 'body-parser';
-import notFoundRoutes from './libs/routes/notFoundRoutes';
-import errorHandler from './libs/routes/errorHandler';
+import { notFoundRoutes, errorHandler } from './libs/routes/index';
 import * as express from 'express';
+import router from './router';
+import successHandler from './libs/routes/successHandler';
 
 class Server {
     public app: express.Express;
@@ -32,8 +33,10 @@ class Server {
                 msg: 'I am OKAY'
             });
         });
+        app.use('/api', router);
         app.use(notFoundRoutes);
         app.use(errorHandler);
+        app.use(successHandler);
     }
 
     public run() {

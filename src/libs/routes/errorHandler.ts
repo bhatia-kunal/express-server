@@ -1,4 +1,4 @@
-const errorHandler = (err,req, res) => {
+const errorHandler = (err,req, res, next) => {
     res.json({
         error: err||"Not Found",
         message: "error",
