@@ -1,16 +1,24 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
+import { deleteData, seed, UpdateData } from './seedData';
 
 class Database {
-    static open = (mongoConfig) => {
+    public static open = (mongoConfig) => {
         return new Promise((resolve, reject) => {
             mongoose
-                .connect(mongoConfig)
-                .then(result => resolve(result))
-                .catch(err => reject(err));
+                .connect(mongoConfig,
+                    { useNewUrlParser: true },
+                    )
+                .then((result) => {
+                    seed();
+                    UpdateData();
+                    deleteData();
+                    resolve(result);
+                })
+                .catch((err) => reject(err));
         });
     }
 
-    public disconnect = () => {
+    public static disconnect = () => {
         mongoose.disconnect();
     }
 }

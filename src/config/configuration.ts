@@ -1,12 +1,12 @@
-import { IConfig } from './IConfig';
 import { config } from 'dotenv';
+import { IConfig } from './IConfig';
 
 config();
 
-const configuration : IConfig = Object.freeze ({
-    Port: process.env.PORT,
+const configuration: IConfig = Object.freeze ({
+    MONGO_URL: process.env.MONGO_URL,
     NODE_ENV: process.env.NODE_ENV,
-    MONGO_URL: process.env.MONGO_URL
-})
+    Port: process.env.PORT,
+});
 
 export default configuration;

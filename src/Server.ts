@@ -1,10 +1,10 @@
-import { IConfig } from './config/IConfig';
 import * as bodyParser from 'body-parser';
-import { notFoundRoutes, errorHandler } from './libs/routes/index';
 import * as express from 'express';
-import router from './router';
-import successHandler from './libs/routes/successHandler';
+import { IConfig } from './config/IConfig';
 import Database from './libs/Database';
+import { errorHandler, notFoundRoutes } from './libs/routes/index';
+import successHandler from './libs/routes/successHandler';
+import router from './router';
 
 class Server {
     public app: express.Express;
@@ -27,11 +27,11 @@ class Server {
 
     public setupRoutes() {
         const {
-            app, config: {Port}
+            app, config: {Port},
         } = this;
         this.app.use('/health-check', (req, res) => {
             res.json({
-                msg: 'I am OKAY'
+                msg: 'I am OKAY',
             });
         });
         app.use('/api', router);
@@ -43,21 +43,21 @@ class Server {
     public run() {
         const {
             app,
-            config: {Port, MONGO_URL}
+            config: {Port, MONGO_URL},
         } = this;
         Database.open(MONGO_URL)
-            .then(result => {
-                console.log("MongoDB Connected");
+            .then((result) => {
+                console.log('MongoDB Connected');
                 app.listen(Port, (error) => {
-                    if(error) {
+                    if (error) {
                         throw error;
                     }
                     console.log(`Server running on Port ${Port}`);
                 });
             })
-            .catch(err => {
-                console.log("Error occured while connecting with DB");
-            })
+            .catch((error) => {
+                console.log('Error occured while connecting with DB');
+            });
     }
 }
 

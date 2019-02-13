@@ -1,5 +1,5 @@
 const notFoundRoutes = (req, res, next) => {
-        next("Not Found");
-}
+        next('Not Found');
+};
 
 export default notFoundRoutes;
