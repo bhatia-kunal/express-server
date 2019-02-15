@@ -1,7 +1,7 @@
 const successHandler = (message: string, status: number, data: any) => ({
+    Data: data,
     Message: message,
     Status: status,
-    Data: data
-})
+});
 
 export default successHandler;

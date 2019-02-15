@@ -1,58 +1,60 @@
 const validations = {
-    post: {
-        id: {
-            required: true,
-            number: true,
-            in: ['body'],
-            errorMessage: "Id is required",
-            custom: function(value) {
-                console.log("Value", value);
-                throw { error: 'Error Occured', message: 'Message'}
-            }
-        },
-        name: {
-            required: true,
-            regex: /^[a-zA-Z]*$/,
-            in: ['body'],
-            errorMessage: "Name is required"
-        }
-    },
     delete: {
         id: {
+            errorMessage: 'Id is required',
+            in: ['params'],
             required: true,
-            errorMessage: "Id is required",
-            in: ['params']
-        }
+        },
     },
     get: {
-        skip: {
-            required: false,
-            default: 0,
-            number: true,
-            in: ['query'],
-            errorMessage: "Skip is invalid"
-        },
         limit: {
-            required: false,
             default: 10,
-            number: true,
+            errorMessage: 'Limit is invalid',
             in: ['query'],
-            errorMessage: "Limit is invalid"
-        }
+            number: true,
+            required: false,
+        },
+        skip: {
+            default: 0,
+            errorMessage: 'Skip is invalid',
+            in: ['query'],
+            number: true,
+            required: false,
+        },
+    },
+    post: {
+        id: {
+            errorMessage: 'Id is required',
+            in: ['body'],
+            number: true,
+            required: true,
+            custom(value) {
+                console.log('Value', value);
+                throw { error: 'Error Occured', message: 'Message'};
+            },
+        },
+        name: {
+            errorMessage: 'Name is required',
+            in: ['body'],
+            regex: /^[a-zA-Z]*$/,
+            required: true,
+        },
     },
     put: {
-        id: {
-            required: true,
-            string: true,
-            in: ['body']
-        },
         dataToUpdate: {
             in: ['body'],
-            required: true,
             isObject: true,
-            custom: function(dateToUpdate) {}
-        }
-    }
+            required: true,
+            custom(dataToUpdate) {
+                console.log(dataToUpdate);
+            },
+        },
+        id: {
+            in: ['body'],
+            required: true,
+            string: true,
+        },
+    },
 };
 
 export default validations;

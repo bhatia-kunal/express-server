@@ -6,13 +6,13 @@ import validateUsers from './utils/validation';
 
 const users:Iusers[] = [
     {
+        reviewerEmail : 'reviewer1@successive.tch',
         traineeEmail : 'trainee1@successive.tech',
-        reviewerEmail : 'reviewer1@successive.tch'
     },
     {
+        reviewerEmail : 'reviewer2@successive.tch',
         traineeEmail : 'trainee2@successive.tech',
-        reviewerEmail : 'reviewer2@successive.tch'
-    }
+    },
 ];
 
 validateUsers(users);
@@ -22,4 +22,3 @@ console.log();
 diamond(5);
 console.log();
 equilateralTriangle(5);
-
