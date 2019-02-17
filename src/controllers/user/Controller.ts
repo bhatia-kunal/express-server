@@ -3,19 +3,11 @@ import successHandler from '../../libs/routes/successHandler';
 
 class UserController {
     public get(req: Request, res: Response) {
-        const data = [
-            {
-                id: 1,
-                name: 'trainee1',
-            },
-            {
-                id: 2,
-                name: 'trainee2',
-            },
-        ];
-        res
-            .status(200)
-            .send(successHandler('Trainees are here', 200, data));
+       const { result } = req.body;
+       console.log('Data of particular id', result);
+       res
+        .status(200)
+        .send(successHandler('Trainees are here', 200, result));
     }
 
     public post(req: Request, res: Response) {

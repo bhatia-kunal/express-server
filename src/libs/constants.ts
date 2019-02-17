@@ -9,5 +9,11 @@ const permission: IPermission = {
     read: [trainee, trainer],
     write: [trainer],
   },
+  User: {
+    all: [headTrainer],
+    delete: [],
+    read: [trainee, trainer],
+    write: [trainer],
+  },
 };
 export default permission;
