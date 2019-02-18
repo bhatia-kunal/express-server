@@ -23,6 +23,19 @@ class UserRepository {
     public update() {
         return this.Model.updateMany({ name: 'xyzxyz' }, { $set: {name: 'abcabc' }});
     }
+
+    public countUser() {
+        return this.Model.countDocuments();
+    }
+
+    public getUser(data) {
+        return this.Model.findOne(data, (error, result) => {
+            if(error) 
+                return error;
+            else
+                return result;
+        });
+    }
 }
 
 export default UserRepository;
