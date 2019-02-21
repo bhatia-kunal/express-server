@@ -4,14 +4,14 @@ const repository = new UserRepository();
 export const seed = () => {
     repository.countUser()
         .then((result) => {
-            if(!result) {
+            if (!result) {
                 repository.create({
                     email: 'head.trainer@successive.tech',
                     name: 'Head-Trainer',
                     role: 'head-trainer',
                 });
             }
-        })
+        });
 };
 
 export const deleteData = () => {
