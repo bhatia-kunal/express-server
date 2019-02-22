@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
+import versionableSchema from '../versionable/VersionableSchema';
 
-class UserSchema extends mongoose.Schema {
+class UserSchema extends versionableSchema {
     constructor(option: any) {
         const data = {
             _id: String,
