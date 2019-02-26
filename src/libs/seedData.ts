@@ -1,7 +1,7 @@
 import UserRepository from '../repositories/user/UserRepository';
 const repository = new UserRepository();
 
-export const seed = () => {
+const seed = () => {
     repository.countUser()
         .then((result) => {
             if (!result) {
@@ -10,20 +10,13 @@ export const seed = () => {
                     name: 'Head-Trainer',
                     role: 'head-trainer',
                 });
+                repository.create({
+                    email: 'trainee@successive.tech',
+                    name: 'Kunal',
+                    role: 'trainee',
+                });
             }
         });
 };
 
-export const deleteData = () => {
-    repository.delete()
-    .then((result) => {
-        console.log('deleted', result);
-    });
-};
-
-export const UpdateData = () => {
-    repository.update()
-    .then((result) => {
-        console.log('Updates', result);
-    });
-};
+export default seed;

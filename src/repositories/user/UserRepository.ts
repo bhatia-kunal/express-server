@@ -22,22 +22,7 @@ class UserRepository extends VersionableRepository <IUserModel, mongoose.Model<I
     }
 
     public update(data: any, dataToUpdate: any) {
-        return this.genricUpdate(data, dataToUpdate);
-    }
-
-    public countUser() {
-        return this.Model.countDocuments();
-    }
-
-    public getUser(data) {
-        return this.Model.findOne(data, (error, result) => {
-            if (error) {
-                return error;
-            }
-            else {
-                return result;
-            }
-        });
+        return this.genericUpdate(data, dataToUpdate);
     }
 }
 

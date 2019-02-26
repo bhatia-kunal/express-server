@@ -15,9 +15,9 @@ const {
 } = validations;
 
 userRouter
-    .get('/', validationHandler(validateGet), authMiddleWare('User', 'read'), get)
-    .post('/', validationHandler(validatePost), post)
-    .put('/', validationHandler(validatePut), put)
-    .delete('/', validationHandler(validateDelete), del);
+    .get('/', authMiddleWare('User', 'read'), validationHandler(validateGet), get)
+    .post('/', authMiddleWare('User', 'read'),  validationHandler(validatePost), post)
+    .put('/', authMiddleWare('User', 'read'), validationHandler(validatePut), put)
+    .delete('/:id', authMiddleWare('User', 'read'), validationHandler(validateDelete), del);
 
 export default userRouter;

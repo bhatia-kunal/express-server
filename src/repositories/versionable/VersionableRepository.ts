@@ -4,17 +4,17 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return String(mongoose.Types.ObjectId());
     }
 
-    private versionableModel: M;
+    private versionableModel: M; 
 
     constructor(Model) {
         this.versionableModel = Model;
     }
 
-    public findUser(data) {
+    public findUser(data: any) {
         return this.versionableModel.findOne(data).lean();
     }
 
-    public count() {
+    public countUser() {
         return this.versionableModel.countDocuments();
     }
 
@@ -31,21 +31,23 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
     }
 
     public genericDelete(data: any) {
-        const { originalId } = data;
-        return this.versionableModel.updateOne({ originalId, deletedAt: {$exists: false}}, { deleteAt: Date.now()});
+        console.log('Delete', data);
+        return this.versionableModel.updateOne({...data, deletedAt: {$exists: false}}, {$set: { deletedAt: Date.now() }});
     }
 
-    public genricUpdate(data: any, dataToUpdate: any) {
+    public genericUpdate(data: any, dataToUpdate: any) {
         const { originalId } = data;
-        this.versionableModel.findOne({ originalId, deledatateAt: {$exist: false}})
+        console.log(data);
+        this.versionableModel.findOne({ originalId, deletedAt: {$exist: false}})
             .then((result) => {
                 const dataUpdate = Object.assign(result, dataToUpdate);
+                console.log('Inside then', dataUpdate);
                 return this.genericCreateAgain({dataUpdate});
             })
             .then((result) => {
                 return this.versionableModel.updateOne({
+                    _id: originalId,
                     deleteAt: {$exists: false}},
-                    originalId,
                     {deleteAt: Date.now()},
                     );
             })

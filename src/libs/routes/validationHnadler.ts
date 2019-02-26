@@ -51,16 +51,14 @@ const validationHandler = (config) => {
                 item.custom(80);
             }
 
-            if (item && item.required) {
             if (item && item.in) {
                 const reqKeys = Object.keys(req[item.in[0]]);
-                if (!reqKeys.length) {
+                if (reqKeys.length) {
                     if (!reqKeys.includes(key)) {
                         next(notFound('incorrect request'));
                     }
                 }
             }
-        }
         });
         next();
     };

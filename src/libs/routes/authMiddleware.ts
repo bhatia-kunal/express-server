@@ -19,8 +19,9 @@ const authMiddleWare = (module, permissionType) => {
 
         const repository = new UserRepository();
         req.body.data = user;
-        const {email, name, role} = user;
-        repository.getUser({email, name, role})
+        console.log(user);
+        const { id } = user;
+        repository.findUser({_id: id})
             .then((result) => {
                 if (!result) {
                     next({

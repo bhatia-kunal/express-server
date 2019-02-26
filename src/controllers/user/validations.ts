@@ -30,7 +30,7 @@ const validations = {
             required: true,
             custom(value) {
                 console.log('Value', value);
-                throw { error: 'Error Occured', message: 'Message'};
+                // throw { error: 'Error Occured in Validation', message: 'Message'};
             },
         },
         name: {
