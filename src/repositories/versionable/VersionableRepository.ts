@@ -33,7 +33,7 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
     public genericDelete(data: any) {
         console.log('Delete', data);
         return this.versionableModel.findOneAndUpdate(
-            {originalId: data.id},
+            {originalId: data.id, deletedAt: {$exists: false}},
             {$set: { deletedAt: Date.now() }},
             )
             .then((result) => {
@@ -52,11 +52,13 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
             delete result._id;
             const dataToUpdate = {...result, ...updateData};
             const newId = VersionableRepository.generateObjectId();
-            this.versionableModel.create({...dataToUpdate, _id: newId});
-            this.versionableModel.updateOne(
+            this.versionableModel.create({...dataToUpdate, _id: newId, createdAt: Date.now()});
+            console.log(previousId);
+            this.versionableModel.findOneAndUpdate(
                 {_id: previousId, deletedAt: {$exists: false}},
                 {$set: { deletedAt: Date.now() }},
-            );
+                {new: true},
+            ).then((updatedResult) => updatedResult);
         });
     }
 }
