@@ -6,7 +6,7 @@ import UserController from './Controller';
 
 const userRouter = express.Router();
 
-const { get, post, put, delete: del } = UserController;
+const { getMe, post, put, delete: del } = UserController;
 const {
     get: validateGet,
     post: validatePost,
@@ -15,7 +15,7 @@ const {
 } = validations;
 
 userRouter
-    .get('/', authMiddleWare('User', 'read'), validationHandler(validateGet), get)
+    .get('/me', authMiddleWare('User', 'read'), validationHandler(validateGet), getMe)
     .post('/', authMiddleWare('User', 'read'),  validationHandler(validatePost), post)
     .put('/', authMiddleWare('User', 'read'), validationHandler(validatePut), put)
     .delete('/:id', authMiddleWare('User', 'read'), validationHandler(validateDelete), del);

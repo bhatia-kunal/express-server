@@ -39,11 +39,17 @@ const validationHandler = (config) => {
                 }
             }
 
-            if (item.isObject) {
-                const validateValue = value.filter((item5) => item5);
-                const iterate = validateValue.values();
-                if (typeof iterate.next().value !== 'object') {
-                next(notFound('type' || `${validateValue}`));
+            // if (item.isObject) {
+            //     const validateValue = value.filter((item5) => item5);
+            //     const iterate = validateValue.values();
+            //     if (typeof iterate.next().value !== 'object') {
+            //     next(notFound('type' || `${validateValue}`));
+            //     }
+            // }
+            if (item && item.isObject) {
+                const temp = value[0];
+                if (typeof temp !== 'object') {
+                    next(notFound(`${key} as object is required`));
                 }
             }
 

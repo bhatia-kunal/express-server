@@ -4,14 +4,21 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return String(mongoose.Types.ObjectId());
     }
 
-    private versionableModel: M; 
+    private versionableModel: M;
 
     constructor(Model) {
         this.versionableModel = Model;
     }
 
     public findUser(data: any) {
-        return this.versionableModel.findOne(data).lean();
+        console.log(data);
+        return this.versionableModel.findOne({...data, deletedAt: {$exists: false}}).lean();
+    }
+
+    public async findAll(data) {
+        const { role } = data;
+        return this.versionableModel.find(
+        { role, deletedAt: { $exists: false } }, undefined);
     }
 
     public countUser() {
@@ -23,36 +30,33 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return this.versionableModel.create({ ...data, _id: id, originalId: id });
     }
 
-    public genericCreateAgain(data: any): Promise<D> {
-        const id = VersionableRepository.generateObjectId();
-        const save = { ...data };
-        save._id = id;
-        return this.versionableModel.create(save);
-    }
-
     public genericDelete(data: any) {
         console.log('Delete', data);
-        return this.versionableModel.updateOne({...data, deletedAt: {$exists: false}}, {$set: { deletedAt: Date.now() }});
+        return this.versionableModel.findOneAndUpdate(
+            {originalId: data.id},
+            {$set: { deletedAt: Date.now() }},
+            )
+            .then((result) => {
+                return result;
+            }).catch((error) => {
+                throw error;
+            });
     }
 
-    public genericUpdate(data: any, dataToUpdate: any) {
+    public genericUpdate(data: any, updateData: any) {
         const { originalId } = data;
-        console.log(data);
-        this.versionableModel.findOne({ originalId, deletedAt: {$exist: false}})
-            .then((result) => {
-                const dataUpdate = Object.assign(result, dataToUpdate);
-                console.log('Inside then', dataUpdate);
-                return this.genericCreateAgain({dataUpdate});
-            })
-            .then((result) => {
-                return this.versionableModel.updateOne({
-                    _id: originalId,
-                    deleteAt: {$exists: false}},
-                    {deleteAt: Date.now()},
-                    );
-            })
-            .catch((error) => {
-                return error;
-            });
+        this.versionableModel.findOne({ originalId, deletedAt: { $exists: false } })
+        .lean()
+        .then((result) => {
+            const previousId = result._id;
+            delete result._id;
+            const dataToUpdate = {...result, ...updateData};
+            const newId = VersionableRepository.generateObjectId();
+            this.versionableModel.create({...dataToUpdate, _id: newId});
+            this.versionableModel.updateOne(
+                {_id: previousId, deletedAt: {$exists: false}},
+                {$set: { deletedAt: Date.now() }},
+            );
+        });
     }
 }

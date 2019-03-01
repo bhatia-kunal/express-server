@@ -1,28 +1,26 @@
 import { Next, Request, Response } from 'express';
 import successHandler from '../../libs/routes/successHandler';
 import UserRepository from '../../repositories/user/UserRepository';
-import versionableRepository from '../../repositories/versionable/VersionableRepository';
 
 class UserController {
-    public get(req: Request, res: Response) {
+    public getMe(req: Request, res: Response) {
         try {
             const { result } = req.body;
             console.log('Data of particular id', result);
             res
                 .status(200)
-                .send(successHandler('Trainees are here', 200, result));
+                .send(successHandler('Your Data is here', 200, result));
         }
-        catch(error) {
+        catch (error) {
             console.log(error);
         }
     }
 
     public post(req: Request, res: Response, next: Next) {
-        const { email, name, Id, role } = req.body;
+        const { email, name, role } = req.body;
 
         const data = {
             email,
-            Id,
             name,
             role,
         };
@@ -37,8 +35,8 @@ class UserController {
     public put(req: Request, res: Response) {
         const { dataToUpdate, id } = req.body;
         const data = {
-            originalId: id,
             dataToUpdate,
+            originalId: id,
         };
         const userRepository = new UserRepository();
         userRepository.update({originalId: id}, dataToUpdate);
@@ -50,13 +48,10 @@ class UserController {
     public delete(req: Request, res: Response) {
         const { id } = req.params;
         const userRepository = new UserRepository();
-        userRepository.delete({_id: id});
-        const data = {
-            Id: id,
-        };
+        const result = userRepository.delete(id);
         res
             .status(200)
-            .send(successHandler('Trainee deleted successfully', 200, data));
+            .send(successHandler('Trainee deleted successfully', 200, result));
     }
 }
 
