@@ -6,13 +6,12 @@ class UserController {
     public getMe(req: Request, res: Response) {
         try {
             const { result } = req.body;
-            console.log('Data of particular id', result);
             res
                 .status(200)
                 .send(successHandler('Your Data is here', 200, result));
         }
         catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 

@@ -15,10 +15,9 @@ const validationHandler = (config) => {
             }
 
             if (item && item.string) {
-                const validateValue = value.filter((item2) => item2);
-                const iterate = validateValue.values();
-                if (typeof iterate.next().value !== 'string') {
-                    next(notFound('Not a string'));
+                const temp = value[0];
+                if (typeof temp !== 'string') {
+                    next(notFound(`${key} as string is required`));
                 }
             }
 
@@ -39,13 +38,6 @@ const validationHandler = (config) => {
                 }
             }
 
-            // if (item.isObject) {
-            //     const validateValue = value.filter((item5) => item5);
-            //     const iterate = validateValue.values();
-            //     if (typeof iterate.next().value !== 'object') {
-            //     next(notFound('type' || `${validateValue}`));
-            //     }
-            // }
             if (item && item.isObject) {
                 const temp = value[0];
                 if (typeof temp !== 'object') {
