@@ -1,4 +1,3 @@
-import * as mongoose from 'mongoose';
 import versionableSchema from '../versionable/VersionableSchema';
 
 class UserSchema extends versionableSchema {
@@ -7,6 +6,7 @@ class UserSchema extends versionableSchema {
             _id: String,
             email: String,
             name: String,
+            password: String,
             role: String,
         };
         super(data, option);

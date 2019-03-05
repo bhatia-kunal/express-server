@@ -42,6 +42,19 @@ const validations = {
             string: true,
         },
     },
+    login: {
+        email: {
+            errorMessage: 'Email is required',
+            in: ['body'],
+            regex: /^[\w-\.]+@(successive.tech)$/,
+            required: true,
+        },
+        Password: {
+            errorMessage: 'Password is required',
+            in: ['body'],
+            required: true,
+        },
+    },
 };
 
 export default validations;

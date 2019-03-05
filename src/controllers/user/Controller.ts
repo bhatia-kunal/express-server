@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 import { Next, Request, Response } from 'express';
 import successHandler from '../../libs/routes/successHandler';
 import UserRepository from '../../repositories/user/UserRepository';
@@ -51,6 +53,34 @@ class UserController {
         res
             .status(200)
             .send(successHandler('Trainee deleted successfully', 200, result));
+    }
+
+    public async login(req: Request, res: Response, next: Next) {
+        try {
+            const { email, Password } = req.body;
+            const userRepository = new UserRepository();
+            const result = await userRepository.findUser({ email });
+            const { password } = result;
+            bcrypt.compare(Password, password, (error, isMatch) => {
+                if(isMatch) {
+                    const key = process.env.KEY;
+                    const token = jwt.sign(
+                        {
+                            result,
+                        },
+                        key,
+                        { expiresIn: 15*60 },
+                    );
+                    res
+                        .status(200)
+                        .send(successHandler(email, 200, token));
+                } else {
+                    next('Password incorrect');
+                }
+            });
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
