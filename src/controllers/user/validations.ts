@@ -22,6 +22,19 @@ const validations = {
             required: false,
         },
     },
+    login: {
+        Password: {
+            errorMessage: 'Password is required',
+            in: ['body'],
+            required: true,
+        },
+        email: {
+            errorMessage: 'Email is required',
+            in: ['body'],
+            regex: /^[\w-\.]+@(successive.tech)$/,
+            required: true,
+        },
+    },
     post: {
         name: {
             errorMessage: 'Name is required',
@@ -40,19 +53,6 @@ const validations = {
             in: ['body'],
             required: true,
             string: true,
-        },
-    },
-    login: {
-        email: {
-            errorMessage: 'Email is required',
-            in: ['body'],
-            regex: /^[\w-\.]+@(successive.tech)$/,
-            required: true,
-        },
-        Password: {
-            errorMessage: 'Password is required',
-            in: ['body'],
-            required: true,
         },
     },
 };

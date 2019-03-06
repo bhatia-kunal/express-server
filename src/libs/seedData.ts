@@ -1,22 +1,26 @@
+import * as bcrypt from 'bcrypt';
 import UserRepository from '../repositories/user/UserRepository';
 const repository = new UserRepository();
+const Password = process.env.PASSWORD;
 
-const seed = () => {
-    repository.countUser()
-        .then((result) => {
-            if (!result) {
-                repository.create({
-                    email: 'head.trainer@successive.tech',
-                    name: 'Head-Trainer',
-                    role: 'head-trainer',
-                });
-                repository.create({
-                    email: 'trainee@successive.tech',
-                    name: 'Kunal',
-                    role: 'trainee',
-                });
-            }
+const seed = async () => {
+    const result = await repository.countUser();
+    if (!result) {
+        bcrypt.hash(Password, 10, (error, hash) => {
+            repository.create({
+                email: 'head.trainer@successive.tech',
+                name: 'Head-Trainer',
+                password: hash,
+                role: 'head-trainer',
+            });
+            repository.create({
+                email: 'trainee@successive.tech',
+                name: 'Kunal',
+                password: hash,
+                role: 'trainee',
+            });
         });
+    }
 };
 
 export default seed;

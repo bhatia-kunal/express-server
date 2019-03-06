@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 import { Next, Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 import successHandler from '../../libs/routes/successHandler';
 import UserRepository from '../../repositories/user/UserRepository';
 
@@ -62,14 +62,14 @@ class UserController {
             const result = await userRepository.findUser({ email });
             const { password } = result;
             bcrypt.compare(Password, password, (error, isMatch) => {
-                if(isMatch) {
+                if (isMatch) {
                     const key = process.env.KEY;
                     const token = jwt.sign(
                         {
                             result,
                         },
                         key,
-                        { expiresIn: 15*60 },
+                        { expiresIn: 15 * 60 },
                     );
                     res
                         .status(200)
