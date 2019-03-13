@@ -5,7 +5,7 @@ import successHandler from '../../libs/routes/successHandler';
 import UserRepository from '../../repositories/user/UserRepository';
 
 class UserController {
-    public getMe(req: Request, res: Response) {
+    public getMe(req: Request, res: Response, next: Next) {
         try {
             const { result } = req.body;
             res
@@ -13,7 +13,7 @@ class UserController {
                 .send(successHandler('Your Data is here', 200, result));
         }
         catch (error) {
-            throw error;
+            next(error);
         }
     }
 
@@ -27,13 +27,7 @@ class UserController {
                 .send(successHandler('Trainees fetched successfully', 200, result));
         }
         catch (error) {
-            throw next(
-                {
-                    error: 'No data fetched',
-                    message: 'No Data fetched',
-                    status: 400,
-                },
-            );
+            next(error);
         }
     }
 
@@ -59,11 +53,11 @@ class UserController {
                 .send(successHandler('User created successfully', 200, data));
         }
         catch (error) {
-            throw error;
+            next(error);
         }
     }
 
-    public async put(req: Request, res: Response) {
+    public async put(req: Request, res: Response, next: Next) {
         try {
             const { dataToUpdate, id } = req.body;
             const userRepository = new UserRepository();
@@ -73,11 +67,11 @@ class UserController {
                 .send(successHandler('User updated successfully', 200, response));
         }
         catch (error) {
-            throw error;
+            next(error);
         }
     }
 
-    public delete(req: Request, res: Response) {
+    public delete(req: Request, res: Response, next: Next) {
         try {
             const { id } = req.params;
             const userRepository = new UserRepository();
@@ -87,16 +81,17 @@ class UserController {
                 .send(successHandler('Trainee deleted successfully', 200, result));
         }
         catch (error) {
-            throw error;
+            next(error);
         }
     }
 
     public async login(req: Request, res: Response, next: Next) {
         try {
-            const { email, Password } = req.body;
+            const {email, Password} = req.body;
             const userRepository = new UserRepository();
-            const result = await userRepository.findUser({ email });
-            const { password } = result;
+            const result = await userRepository.findUser({email});
+            const {password} = result;
+            console.log(result);
             bcrypt.compare(Password, password, (error, isMatch) => {
                 if (isMatch) {
                     const key = process.env.KEY;
@@ -115,7 +110,7 @@ class UserController {
                 }
             });
         } catch (error) {
-            throw error;
+            next(error);
         }
     }
 }

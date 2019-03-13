@@ -27,8 +27,9 @@ class Server {
 
     public setupRoutes() {
         const {
-            app, config: {Port},
+            app, config: { Port },
         } = this;
+
         this.app.use('/health-check', (req, res) => {
             res.json({
                 msg: 'I am OKAY',
@@ -37,13 +38,13 @@ class Server {
         app.use('/api', router);
         app.use(notFoundRoutes);
         app.use(errorHandler);
-        app.use(successHandler);
+        // app.use(successHandler);
     }
 
     public run() {
         const {
             app,
-            config: {Port, MONGO_URL},
+            config: { Port, MONGO_URL },
         } = this;
         Database.open(MONGO_URL)
             .then((result) => {

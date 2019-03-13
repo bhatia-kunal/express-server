@@ -7,6 +7,7 @@ import UserController from './Controller';
 const userRouter = express.Router();
 
 const { getMe, post, put, delete: del, login, getAll } = UserController;
+
 const {
     get: validateGet,
     post: validatePost,

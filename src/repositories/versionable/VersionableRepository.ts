@@ -20,8 +20,10 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
             limit: Number(limit),
             skip: Number(skip),
         });
+
         const userCount = await this.countUser();
-        const result = {userCount, ...foundData};
+        const result = { userCount, ...foundData };
+
         if (!result) {
             throw {
                 error: 'No Data Found',
@@ -43,7 +45,7 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
 
     public async genericDelete(data: any) {
         console.log('Delete', data);
-        const result = this.versionableModel.findOneAndUpdate(
+        const result = await this.versionableModel.findOneAndUpdate(
             {originalId: data.id, deletedAt: {$exists: false}},
             {$set: { deletedAt: Date.now() }},
             );
