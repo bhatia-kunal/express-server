@@ -48,17 +48,21 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         this.versionableModel.findOne({ originalId, deletedAt: { $exists: false } })
         .lean()
         .then((result) => {
+            let returnedData = {};
             const previousId = result._id;
             delete result._id;
             const dataToUpdate = {...result, ...updateData};
             const newId = VersionableRepository.generateObjectId();
-            this.versionableModel.create({...dataToUpdate, _id: newId, createdAt: Date.now()});
             console.log(previousId);
             this.versionableModel.findOneAndUpdate(
                 {_id: previousId, deletedAt: {$exists: false}},
                 {$set: { deletedAt: Date.now() }},
                 {new: true},
-            ).then((updatedResult) => updatedResult);
+                ).then((updatedResult) => updatedResult);
+            this.versionableModel.create({...dataToUpdate, _id: newId, createdAt: Date.now()})
+                    .then((resultData) => returnedData = resultData);
+                // console.log('Response', response);
+            return result;
         });
     }
 }

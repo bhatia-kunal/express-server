@@ -33,15 +33,16 @@ class UserController {
 
     public put(req: Request, res: Response) {
         const { dataToUpdate, id } = req.body;
-        const data = {
-            dataToUpdate,
-            originalId: id,
-        };
+        // const data = {
+        //     dataToUpdate,
+        //     originalId: id,
+        // };
         const userRepository = new UserRepository();
-        userRepository.update({originalId: id}, dataToUpdate);
+        const response  = userRepository.update({originalId: id}, dataToUpdate);
+        console.log('Result ', response);
         res
             .status(200)
-            .send(successHandler('User updated successfully', 200, data));
+            .send(successHandler('User updated successfully', 200, response));
     }
 
     public delete(req: Request, res: Response) {
