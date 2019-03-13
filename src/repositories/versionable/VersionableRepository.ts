@@ -15,10 +15,21 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return this.versionableModel.findOne({...data, deletedAt: {$exists: false}}).lean();
     }
 
-    public async findAll(data) {
-        const { role } = data;
-        return this.versionableModel.find(
-        { role, deletedAt: { $exists: false } }, undefined);
+    public async getAll(data, skip, limit) {
+        const foundData = await this.versionableModel.find({...data, deletedAt: {$exists: false}}, undefined, {
+            limit: Number(limit),
+            skip: Number(skip),
+        });
+        const userCount = await this.countUser();
+        const result = {userCount, ...foundData};
+        if (!result) {
+            throw {
+                error: 'No Data Found',
+                message: 'No data present in DB',
+                status: 400,
+            };
+        }
+        return result;
     }
 
     public countUser() {
@@ -30,35 +41,29 @@ export default class VersionableRepository <D extends mongoose.Document, M exten
         return this.versionableModel.create({ ...data, _id: id, originalId: id });
     }
 
-    public genericDelete(data: any) {
+    public async genericDelete(data: any) {
         console.log('Delete', data);
-        return this.versionableModel.findOneAndUpdate(
+        const result = this.versionableModel.findOneAndUpdate(
             {originalId: data.id, deletedAt: {$exists: false}},
             {$set: { deletedAt: Date.now() }},
-            )
-            .then((result) => {
-                return result;
-            }).catch((error) => {
-                throw error;
-            });
+            );
+        return result;
     }
 
-    public genericUpdate(data: any, updateData: any) {
+    public async genericUpdate(data: any, updateData: any) {
         const { originalId } = data;
-        this.versionableModel.findOne({ originalId, deletedAt: { $exists: false } })
-        .lean()
-        .then((result) => {
-            const previousId = result._id;
-            delete result._id;
-            const dataToUpdate = {...result, ...updateData};
-            const newId = VersionableRepository.generateObjectId();
-            this.versionableModel.create({...dataToUpdate, _id: newId, createdAt: Date.now()});
-            console.log(previousId);
-            this.versionableModel.findOneAndUpdate(
-                {_id: previousId, deletedAt: {$exists: false}},
-                {$set: { deletedAt: Date.now() }},
-                {new: true},
-            ).then((updatedResult) => updatedResult);
-        });
+        const foundData = await this.versionableModel.findOne({ originalId, deletedAt: { $exists: false } })
+        .lean();
+        const previousId = foundData._id;
+        delete foundData._id;
+        const dataToUpdate = {...foundData, ...updateData};
+        const newId = VersionableRepository.generateObjectId();
+        const updatedDoc = await this.versionableModel.create({...dataToUpdate, _id: newId, createdAt: Date.now()});
+        await this.versionableModel.findOneAndUpdate(
+            {_id: previousId, deletedAt: {$exists: false}},
+            {$set: { deletedAt: Date.now() }},
+            {new: true},
+        );
+        return updatedDoc;
     }
 }
