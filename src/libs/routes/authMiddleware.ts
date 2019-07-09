@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
-import hasPermission from './permissions';
 import UserRepository from '../../repositories/user/UserRepository';
+import hasPermission from './permissions';
 
 const authMiddleWare = (module, permissionType) => {
     return (req, res, next) => {
@@ -18,11 +18,11 @@ const authMiddleWare = (module, permissionType) => {
         });
 
         const repository = new UserRepository();
-        req.body.data = user;
-        const {email, name, role} = user;
-        repository.getUser({email, name, role})
+        req.body.data = user.result;
+        const { originalId: id } = user.result;
+        repository.findUser({originalId: id})
             .then((result) => {
-                if(!result) {
+                if (!result) {
                     next({
                         error: 'Unauthorized Access',
                         message: 'User not found',
@@ -30,7 +30,7 @@ const authMiddleWare = (module, permissionType) => {
                     });
                 }
                 req.body.result = result;
-                if(result && !hasPermission(module, result.role, permissionType)) {
+                if (result && !hasPermission(module, result.role, permissionType)) {
                     next({
                         error: 'Permission Denied',
                         message: 'Permission Denied',

@@ -22,17 +22,20 @@ const validations = {
             required: false,
         },
     },
-    post: {
-        id: {
-            errorMessage: 'Id is required',
+    login: {
+        Password: {
+            errorMessage: 'Password is required',
             in: ['body'],
-            number: true,
             required: true,
-            custom(value) {
-                console.log('Value', value);
-                throw { error: 'Error Occured', message: 'Message'};
-            },
         },
+        email: {
+            errorMessage: 'Email is required',
+            in: ['body'],
+            regex: /^[\w-\.]+@(successive.tech)$/,
+            required: true,
+        },
+    },
+    post: {
         name: {
             errorMessage: 'Name is required',
             in: ['body'],
@@ -45,9 +48,6 @@ const validations = {
             in: ['body'],
             isObject: true,
             required: true,
-            custom(dataToUpdate) {
-                console.log(dataToUpdate);
-            },
         },
         id: {
             in: ['body'],
