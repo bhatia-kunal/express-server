@@ -1,42 +1,57 @@
 import { Next, Request, Response } from 'express';
 import successHandler from '../../libs/routes/successHandler';
+import UserRepository from '../../repositories/user/UserRepository';
 
 class UserController {
-    public get(req: Request, res: Response) {
-       const { result } = req.body;
-       console.log('Data of particular id', result);
-       res
-        .status(200)
-        .send(successHandler('Trainees are here', 200, result));
+    public getMe(req: Request, res: Response) {
+        try {
+            const { result } = req.body;
+            res
+                .status(200)
+                .send(successHandler('Your Data is here', 200, result));
+        }
+        catch (error) {
+            throw error;
+        }
     }
 
-    public post(req: Request, res: Response) {
-        const { name, id } = req.body;
+    public post(req: Request, res: Response, next: Next) {
+        const { email, name, role } = req.body;
 
-        const data = [{
-            id,
+        const data = {
+            email,
             name,
-        }];
+            role,
+        };
+        console.log('post data', data);
+        const userRepository = new UserRepository();
+        userRepository.create(data);
         res
             .status(200)
-            .send(successHandler('Trainee posted successfully', 200, data));
+            .send(successHandler('User created successfully', 200, data));
     }
 
     public put(req: Request, res: Response) {
         const { dataToUpdate, id } = req.body;
-        const data = [{
-            Id: id,
-            dataToUpdate,
-        }];
+        // const data = {
+        //     dataToUpdate,
+        //     originalId: id,
+        // };
+        const userRepository = new UserRepository();
+        const response  = userRepository.update({originalId: id}, dataToUpdate);
+        console.log('Result ', response);
         res
             .status(200)
-            .send(successHandler('Trainee updated', 200, data));
+            .send(successHandler('User updated successfully', 200, response));
     }
 
     public delete(req: Request, res: Response) {
+        const { id } = req.params;
+        const userRepository = new UserRepository();
+        const result = userRepository.delete(id);
         res
             .status(200)
-            .send(successHandler('Trainee deleted successfully', 200, 'Data can not be retrieved.'));
+            .send(successHandler('Trainee deleted successfully', 200, result));
     }
 }
 

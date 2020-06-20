@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "babel": "babel-node src --presets env",
+    "babel": "babel-node Extra --presets env",
     "build": "tsc",
     "nodemon": "nodemon ./dist/index.js",
     "src": "tsc-watch --project . --onSuccess \"npm run nodemon\"",
@@ -13,8 +13,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run lint:fix"
     }
   },
   "repository": {

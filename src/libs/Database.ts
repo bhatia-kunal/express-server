@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { deleteData, seed, UpdateData } from './seedData';
+import seed from './seedData';
 
 class Database {
     public static open = (mongoConfig) => {
@@ -10,8 +10,6 @@ class Database {
                     )
                 .then((result) => {
                     seed();
-                    UpdateData();
-                    deleteData();
                     resolve(result);
                 })
                 .catch((err) => reject(err));

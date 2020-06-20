@@ -23,16 +23,6 @@ const validations = {
         },
     },
     post: {
-        id: {
-            errorMessage: 'Id is required',
-            in: ['body'],
-            number: true,
-            required: true,
-            custom(value) {
-                console.log('Value', value);
-                throw { error: 'Error Occured', message: 'Message'};
-            },
-        },
         name: {
             errorMessage: 'Name is required',
             in: ['body'],
@@ -45,9 +35,6 @@ const validations = {
             in: ['body'],
             isObject: true,
             required: true,
-            custom(dataToUpdate) {
-                console.log(dataToUpdate);
-            },
         },
         id: {
             in: ['body'],

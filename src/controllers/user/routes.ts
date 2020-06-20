@@ -1,12 +1,12 @@
 import * as express from 'express';
 import authMiddleWare from '../../libs/routes/authMiddleware';
-import UserController from './Controller';
-import validations from '../user/validations';
 import validationHandler from '../../libs/routes/validationHnadler';
+import validations from '../user/validations';
+import UserController from './Controller';
 
 const userRouter = express.Router();
 
-const { get, post, put, delete: del } = UserController;
+const { getMe, post, put, delete: del } = UserController;
 const {
     get: validateGet,
     post: validatePost,
@@ -15,9 +15,9 @@ const {
 } = validations;
 
 userRouter
-    .get('/', validationHandler(validateGet), authMiddleWare('User', 'read'), get)
-    .post('/', validationHandler(validatePost), post)
-    .put('/', validationHandler(validatePut), put)
-    .delete('/', validationHandler(validateDelete), del);
+    .get('/me', authMiddleWare('User', 'read'), validationHandler(validateGet), getMe)
+    .post('/', authMiddleWare('User', 'read'),  validationHandler(validatePost), post)
+    .put('/', authMiddleWare('User', 'read'), validationHandler(validatePut), put)
+    .delete('/:id', authMiddleWare('User', 'read'), validationHandler(validateDelete), del);
 
 export default userRouter;
